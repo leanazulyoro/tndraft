@@ -4,7 +4,7 @@ var path = require('path');
 module.exports = {
     context: __dirname,
     entry: [
-        './tndraft.jsx'
+        './src/tndraft.jsx'
     ],
     output: {
         path: path.resolve(__dirname + '/public/dist'),
