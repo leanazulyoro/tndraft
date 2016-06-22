@@ -126,8 +126,8 @@ class RichEditorExample extends React.Component {
                         />
                     </div>
                 </div>
-                <button onClick={this.onLogState} value="Foo">Log State</button>
-                <button onClick={this.onLogExportHTML} value="Foo">Log Exported HTML</button>
+                <input type="button" onClick={this.onLogState} value="Log State" />
+                <input type="button" onClick={this.onLogExportHTML} value="Log Exported HTML" />
 
 
             </div>
