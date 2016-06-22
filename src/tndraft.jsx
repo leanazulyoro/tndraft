@@ -110,9 +110,6 @@ class RichEditorExample extends React.Component {
                         editorState={editorState}
                         onToggle={this.toggleInlineStyle}
                     />
-                    <ImageUploadControls
-                        editorState={editorState}
-                    />
                     <div className={className} onClick={this.focus}>
                         <Editor
                             blockStyleFn={getBlockStyle}
@@ -233,22 +230,6 @@ const InlineStyleControls = (props) => {
                     style={type.style}
                 />
             )}
-        </div>
-    );
-};
-
-const ImageUploadControls = () => {
-
-    var imageButton = {
-        label: 'Image Upload',
-    };
-    return (
-        <div className="RichEditor-controls">
-            <StyleButton
-                key={imageButton.label}
-                label={imageButton.label}
-                onClick
-            />
         </div>
     );
 };
