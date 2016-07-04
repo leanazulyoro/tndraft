@@ -14,26 +14,25 @@ class MyMegadraft extends React.Component {
     constructor(props) {
         super(props);
 
-        let contentState = stateFromHTML(props.value);
-        console.log(props.value);
-        console.log(contentState);
-        
+
         this.state = {
-            editorState: EditorState.createWithContent(contentState),
+            editorState: this.props.editorState
         };
-        this.onChange = ::this.onChange;
+        //this.onChange = ::this.onChange;
+        this.onChange = (editorState) => {
+            this.setState({editorState});
+            this.updateContent(editorState);
+        }
     }
 
     onChange(editorState) {
         this.setState({editorState});
     }
 
-    onLogState = () => {
-        console.log(convertToRaw(this.state.editorState.getCurrentContent()));
-    };
-    onLogExportHTML = () => {
-        console.log(stateToHTML(this.state.editorState.getCurrentContent()))
-    };
+
+    updateContent(editorState) {
+        this.props.updateContent(editorState);
+    }
 
     render() {
         return (
@@ -41,8 +40,6 @@ class MyMegadraft extends React.Component {
                 <Megadraft
                     editorState={this.state.editorState}
                     onChange={this.onChange}/>
-                <input onClick={this.onLogExportHTML} value="Log Exported HTML" type="button"/>
-                <input onClick={this.onLogState} value="Log State" type="button"/>
             </div>
         )
     }

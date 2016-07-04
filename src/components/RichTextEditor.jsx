@@ -7,7 +7,6 @@ import {
     RichUtils,
     DefaultDraftBlockRenderMap,
 } from 'draft-js';
-import {Map} from 'immutable';
 
 import {stateFromHTML} from 'draft-js-import-html';
 import {stateToHTML} from 'draft-js-export-html';
@@ -16,18 +15,18 @@ import {stateToHTML} from 'draft-js-export-html';
 class RichTextEditor extends React.Component {
     constructor(props) {
         super(props);
-
-
-        let contentState = stateFromHTML(props.value);
-        console.log(props.value);
-        console.log(contentState);
-
+        
         this.state = {
-            editorState: EditorState.createWithContent(contentState),
+            editorState: this.props.editorState
         };
 
         this.focus = () => this.refs.editor.focus();
-        this.onChange = (editorState) => this.setState({editorState});
+        this.onChange = (editorState) => {
+            this.setState({editorState});
+            this.updateContent(editorState);
+        }
+
+
 
         this.handleKeyCommand = (command) => this._handleKeyCommand(command);
         this.toggleBlockType = (type) => this._toggleBlockType(type);
@@ -63,6 +62,10 @@ class RichTextEditor extends React.Component {
         );
     }
 
+    updateContent(editorState) {
+        this.props.updateContent(editorState);
+    }
+
     render() {
         const {editorState} = this.state;
 
@@ -77,34 +80,28 @@ class RichTextEditor extends React.Component {
         }
 
         return (
-            <div>
-                <div className="RichEditor-root">
-                    <BlockStyleControls
+            <div className="RichEditor-root">
+                <BlockStyleControls
+                    editorState={editorState}
+                    onToggle={this.toggleBlockType}
+                />
+                <InlineStyleControls
+                    editorState={editorState}
+                    onToggle={this.toggleInlineStyle}
+                />
+                <div className={className} onClick={this.focus}>
+                    <Editor
+                        blockStyleFn={getBlockStyle}
+                        customStyleMap={styleMap}
                         editorState={editorState}
-                        onToggle={this.toggleBlockType}
+                        handleKeyCommand={this.handleKeyCommand}
+                        onChange={this.onChange}
+                        placeholder="Tell a story..."
+                        ref="editor"
+                        spellCheck={true}
                     />
-                    <InlineStyleControls
-                        editorState={editorState}
-                        onToggle={this.toggleInlineStyle}
-                    />
-                    <div className={className} onClick={this.focus}>
-                        <Editor
-                            blockStyleFn={getBlockStyle}
-                            customStyleMap={styleMap}
-                            editorState={editorState}
-                            handleKeyCommand={this.handleKeyCommand}
-                            onChange={this.onChange}
-                            placeholder="Tell a story..."
-                            ref="editor"
-                            spellCheck={true}
-                        />
-                    </div>
                 </div>
-                <input
-                    onClick={this.logState}
-                    type="button"
-                    value="Log State"
-                /></div>
+            </div>
         );
     }
 }
