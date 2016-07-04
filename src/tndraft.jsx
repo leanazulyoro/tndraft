@@ -1,5 +1,5 @@
-import Editor from './components/MyMegadraft.jsx';
-//import Editor from './components/RichTextEditor.jsx';
+//import Editor from './components/MyMegadraft.jsx';
+import Editor from './components/RichTextEditor.jsx';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
@@ -16,10 +16,13 @@ export default class TNDraft extends React.Component {
     constructor(props) {
         super(props);
 
-        if (this.props.targetElement.id.length === 0) {
-            throw new Error("The target element must have an ID");
+        var textarea = this.props.targetElement.querySelector('textarea');
+
+        if (textarea.id.length === 0) {
+            throw new Error("The target textarea element must have an ID");
         }
-        let id = this.props.targetElement.id;
+        let id = textarea.id;
+        let name = textarea.getAttribute("name");;
 
 
         if(props.defaultValue.length > 0) {
@@ -33,7 +36,8 @@ export default class TNDraft extends React.Component {
             editorState: editorState,
             tndraftJson: JSON.stringify(editorState),
             tndraftHtml: stateToHTML(editorState.getCurrentContent()),
-            id: id
+            id: id,
+            name: name
         };
     }
 
@@ -52,8 +56,8 @@ export default class TNDraft extends React.Component {
                     editorState={this.state.editorState}
                 />
 
-                <input type="text" name={"tndraft-" + this.state.id + "-json"} value={this.state.tndraftJson} />
-                <input type="text" name={"tndraft-" + this.state.id + "-html"} value={this.state.tndraftHtml} />
+                <input type="hidden" name={"tndraft-" + this.state.name + "-json"} value={this.state.tndraftJson} />
+                <input type="hidden" name={this.state.name} id={this.state.id} value={this.state.tndraftHtml} />
 
             </div>
         )
