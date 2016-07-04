@@ -1,241 +1,62 @@
-import React, { Component } from 'react';
+//import Editor from './components/MyMegadraft.jsx';
+import Editor from './components/RichTextEditor.jsx';
+import React from 'react';
 import ReactDOM from 'react-dom';
-
-
-
-import { EditorState,
-    ContentState,
-    RichUtils,
+import {
+    EditorState,
     convertFromRaw,
-    convertToRaw ,
-    DefaultDraftBlockRenderMap
+    convertToRaw
 } from 'draft-js';
 
-import Editor from 'draft-js-plugins-editor';
-
-import Immutable from 'immutable';
-
+import {stateFromHTML} from 'draft-js-import-html';
 import {stateToHTML} from 'draft-js-export-html';
 
-export default class HelloWorld extends Component {
-
-    render() {
-        return (
-            <div>Hola <span>Mundo!</span></div>
-        );
-    }
-}
-
-console.log(HelloWorld);
-
-
-
-
-const {Map} = Immutable;
-
-class RichEditorExample extends React.Component {
+class TNDraft extends React.Component {
     constructor(props) {
         super(props);
 
+        let contentState = stateFromHTML(props.value);
+        console.log(props.value);
+        console.log(contentState);
+
+        /*let html = "<p>Una de las voces que se expresó a favor de que <a href=\"http://tn.com.ar/personajes/lionel-messi\" title=\"Lionel Messi\">Lionel Messi</a> revea su decisión de dejar la Selección fue <a href=\"http://tn.com.ar/personajes/susana-giménez\" title=\"Susana Giménez\">Susana Giménez</a>. La diva usó su cuenta de Twitter para darle su <strong>apoyo al delantero</strong>.</p><p class=\"links-related\"><span class=\"title\">Leé también</span>: <a href=\"http://tn.com.ar/deportes/after-play/messi-terminante-se-termino-la-seleccion-para-mi_683535\" target=\"_blank\">Messi, contundente: \"Se terminó la Selección para mí\"</a></p><p>\"<strong>Messi querido no te vayas</strong> sos el mejor del mundo pero tambien, sos un ser humano\", escribió la conductora.</p><p>Mirá <strong>el tweet</strong>:</p><p>[social_embed:content:%3Cblockquote%20class%3D%22twitter-tweet%22%20data-lang%3D%22es%22%3E%3Cp%20lang%3D%22es%22%20dir%3D%22ltr%22%3EMessi%20querido%20no%20te%20vayas%20sos%20el%20mejor%20del%20mundo%20pero%20tambien%2C%20sos%20un%20ser%20humano.%3C%2Fp%3E%26mdash%3B%20Susana%20Gimenez%20(%40Su_Gimenez)%20%3Ca%20href%3D%22http%25%2F%2Ftwitter.com%2FSu_Gimenez%2Fstatus%2F747479386333519872%22%3E27%20de%20junio%20de%202016%3C%2Fa%3E%3C%2Fblockquote%3E%0A%3Cscript%20async%20src%3D%22%2F%2Fplatform.twitter.com%2Fwidgets.js%22%20charset%3D%22utf-8%22%3E%3C%2Fscript%3E]</p><p>Más temprano, Su había contado por el mismo medio que <strong>estaba viendo el partido</strong>:</p><p>Y también le dedicó unas <strong>palabras al árbitro</strong>:</p><p>[social_embed:content:%3Cblockquote%20class%3D%22twitter-tweet%22%20data-lang%3D%22es%22%3E%3Cp%20lang%3D%22es%22%20dir%3D%22ltr%22%3EEl%20referi%20%20pelado%20quiere%20hacerse%20famoso%20q%20espanto%20!!!!!%3C%2Fp%3E%26mdash%3B%20Susana%20Gimenez%20(%40Su_Gimenez)%20%3Ca%20href%3D%22http%25%2F%2Ftwitter.com%2FSu_Gimenez%2Fstatus%2F747231029568614400%22%3E27%20de%20junio%20de%202016%3C%2Fa%3E%3C%2Fblockquote%3E%0A%3Cscript%20async%20src%3D%22%2F%2Fplatform.twitter.com%2Fwidgets.js%22%20charset%3D%22utf-8%22%3E%3C%2Fscript%3E]</p><p>Por si algún desprevenido no se enteró, la Argentina perdió la final de la <a href=\"http://tn.com.ar/tags/copa-américa-centenario\" title=\"Copa América Centenario\">Copa América Centenario</a>, tras empatar 0 a 0 con Chile y pasar a penales. Después de eso, Messi dijo ante los medios que dejaría la Selección.</p><p>El público de <a href=\"http://tn.com.ar/deportes\">Toda Pasión</a>, como Susana, tampoco quiere que la Pulga deje el equipo. Vos también podés dejarle un mensaje.</p><p class=\"links-related\"><span class=\"title\">Leé también</span>: <a href=\"http://tn.com.ar/deportes/after-play/las-redes-sociales-se-inundaron-de-mensajes-para-que-messi-revea-su-decision-de-dejar-la-se\" target=\"_blank\">Llueven los mensajes para que Messi revea su decisión de dejar la selección</a></p>";
+        let contentState = stateFromHTML(html);
+*/
+
         this.state = {
-            editorState: EditorState.createEmpty(),
+            editorState: EditorState.createWithContent(contentState),
         };
-
-        this.focus = () => this.refs.editor.focus();
-        this.onChange = (editorState) => this.setState({editorState});
-
-        this.handleKeyCommand = (command) => this._handleKeyCommand(command);
-        this.toggleBlockType = (type) => this._toggleBlockType(type);
-        this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
-
+        this.onChange = ::this.onChange;
     }
 
-    _handleKeyCommand(command) {
-        const {editorState} = this.state;
-        const newState = RichUtils.handleKeyCommand(editorState, command);
-        if (newState) {
-            this.onChange(newState);
-            return true;
-        }
-        return false;
+    onChange(editorState) {
+        this.setState({editorState});
     }
-
-    _toggleBlockType(blockType) {
-        this.onChange(
-            RichUtils.toggleBlockType(
-                this.state.editorState,
-                blockType
-            )
-        );
-    }
-
-    _toggleInlineStyle(inlineStyle) {
-        this.onChange(
-            RichUtils.toggleInlineStyle(
-                this.state.editorState,
-                inlineStyle
-            )
-        );
-    }
-
-    onLogState = () => {
-        console.log(convertToRaw(this.state.editorState.getCurrentContent()));
-    };
-
-    onLogExportHTML = () => {
-        console.log(stateToHTML(this.state.editorState.getCurrentContent()))
-    };
 
     render() {
-        const {editorState} = this.state;
-
-        // If the user changes block type before entering any text, we can
-        // either style the placeholder or hide it. Let's just hide it now.
-        let className = 'RichEditor-editor';
-        var contentState = editorState.getCurrentContent();
-        if (!contentState.hasText()) {
-            if (contentState.getBlockMap().first().getType() !== 'unstyled') {
-                className += ' RichEditor-hidePlaceholder';
-            }
-        }
-
         return (
             <div>
-                <div className="RichEditor-root">
-                    <BlockStyleControls
-                        editorState={editorState}
-                        onToggle={this.toggleBlockType}
-                    />
-                    <InlineStyleControls
-                        editorState={editorState}
-                        onToggle={this.toggleInlineStyle}
-                    />
-                    <div className={className} onClick={this.focus}>
-                        <Editor
-                            blockStyleFn={getBlockStyle}
-                            customStyleMap={styleMap}
-                            editorState={editorState}
-                            handleKeyCommand={this.handleKeyCommand}
-                            onChange={this.onChange}
-                            placeholder="Tell a story..."
-                            ref="editor"
-                            spellCheck={true}
-                        />
-                    </div>
-                </div>
-                <input type="button" onClick={this.onLogState} value="Log State" />
-                <input type="button" onClick={this.onLogExportHTML} value="Log Exported HTML" />
+                <Editor
+                    value={this.props.value}
+                    editorState={this.state.editorState}
+                    onChange={this.onChange}/>
 
+                <input type="hidden" />
+                <input type="hidden" />
 
             </div>
-
-
-        );
+        )
     }
 }
 
-// Custom overrides for "code" style.
-const styleMap = {
-    CODE: {
-        backgroundColor: 'rgba(0, 0, 0, 0.05)',
-        fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
-        fontSize: 16,
-        padding: 2,
-    },
-};
 
-function getBlockStyle(block) {
-    switch (block.getType()) {
-        case 'blockquote': return 'RichEditor-blockquote';
-        default: return null;
-    }
-}
 
-class StyleButton extends React.Component {
-    constructor() {
-        super();
-        this.onToggle = (e) => {
-            e.preventDefault();
-            this.props.onToggle(this.props.style);
-        };
-    }
-
-    render() {
-        let className = 'RichEditor-styleButton';
-        if (this.props.active) {
-            className += ' RichEditor-activeButton';
-        }
-
-        return (
-            <span className={className} onMouseDown={this.onToggle}>
-              {this.props.label}
-            </span>
-        );
-    }
-}
-
-const BLOCK_TYPES = [
-    {label: 'H1', style: 'header-one'},
-    {label: 'H2', style: 'header-two'},
-    {label: 'H3', style: 'header-three'},
-    {label: 'H4', style: 'header-four'},
-    {label: 'H5', style: 'header-five'},
-    {label: 'H6', style: 'header-six'},
-    {label: 'Blockquote', style: 'blockquote'},
-    {label: 'UL', style: 'unordered-list-item'},
-    {label: 'OL', style: 'ordered-list-item'},
-    {label: 'Code Block', style: 'code-block'},
-];
-
-const BlockStyleControls = (props) => {
-    const {editorState} = props;
-    const selection = editorState.getSelection();
-    const blockType = editorState
-        .getCurrentContent()
-        .getBlockForKey(selection.getStartKey())
-        .getType();
-
-    return (
-        <div className="RichEditor-controls">
-            {BLOCK_TYPES.map((type) =>
-                <StyleButton
-                    key={type.label}
-                    active={type.style === blockType}
-                    label={type.label}
-                    onToggle={props.onToggle}
-                    style={type.style}
-                />
-            )}
-        </div>
+function TNDraftRender(targetId, value) {
+    ReactDOM.render(
+        <TNDraft
+            value={value}
+            />,
+        document.getElementById(targetId)
     );
-};
-
-var INLINE_STYLES = [
-    {label: 'Bold', style: 'BOLD'},
-    {label: 'Italic', style: 'ITALIC'},
-    {label: 'Underline', style: 'UNDERLINE'},
-    {label: 'Monospace', style: 'CODE'},
-];
-
-const InlineStyleControls = (props) => {
-    var currentStyle = props.editorState.getCurrentInlineStyle();
-    return (
-        <div className="RichEditor-controls">
-            {INLINE_STYLES.map(type =>
-                <StyleButton
-                    key={type.label}
-                    active={currentStyle.has(type.style)}
-                    label={type.label}
-                    onToggle={props.onToggle}
-                    style={type.style}
-                />
-            )}
-        </div>
-    );
-};
-
-
-ReactDOM.render(
-    <RichEditorExample />,
-    document.getElementById('edit-body')
-);
+}
+window.TNDraftRender = TNDraftRender;

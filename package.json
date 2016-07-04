@@ -16,20 +16,26 @@
     "babel-preset-react-hmre": "^1.1.1",
     "babel-preset-stage-0": "^6.5.0",
     "css-loader": "^0.23.1",
-    "node-sass": "^3.7.0",
-    "sass-loader": "^3.2.0",
+    "node-sass": "^3.8.0",
+    "sass-loader": "^3.2.1",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.0"
   },
   "dependencies": {
     "draft-js": "^0.7.0",
+    "draft-js-editor": "^0.6.15",
     "draft-js-export-html": "^0.3.0",
     "draft-js-hashtag-plugin": "^1.1.0",
+    "draft-js-import-html": "^0.1.10",
     "draft-js-linkify-plugin": "^1.0.1",
     "draft-js-mention-plugin": "^1.1.1",
     "draft-js-plugins-editor": "^1.1.0",
+    "draft-wysiwyg": "^0.2.4",
     "immutable": "^3.8.1",
+    "megadraft": "^0.1.1",
     "react": "^15.1.0",
-    "react-dom": "^15.1.0"
+    "react-dom": "^15.1.0",
+    "react-rte": "^0.3.0",
+    "setimmediate": "^1.0.4"
   }
 }
