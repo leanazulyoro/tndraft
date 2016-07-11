@@ -1,5 +1,5 @@
-import Editor from './editors/MyMegadraft.jsx';
-//import Editor from './editors/RichTextEditor.jsx';
+//import Editor from './editors/MyMegadraft.jsx';
+import Editor from './editors/RichTextEditor.jsx';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
