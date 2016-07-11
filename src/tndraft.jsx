@@ -18,13 +18,15 @@ export default class TNDraft extends React.Component {
 
 
 
-        var textarea = this.props.targetElement.querySelector('textarea');
-
-        /*if (textarea.id.length === 0) {
+        if (this.props.targetElement.id.length === 0) {
             throw new Error("The target textarea element must have an ID");
-        }*/
-        let name = textarea.getAttribute("name");;
-
+        }
+        var textarea = this.props.targetElement.querySelector('textarea');
+        let name = textarea.getAttribute("name");
+        /* @todo add validations:
+            - a textarea must exist inside the targetElement
+            - the textarea must have a name attribute
+        */
 
         if(props.defaultValue.length > 0) {
             var contentState = stateFromHTML(props.defaultValue);
@@ -37,7 +39,8 @@ export default class TNDraft extends React.Component {
             editorState: editorState,
             tndraftJson: JSON.stringify(editorState),
             tndraftHtml: stateToHTML(editorState.getCurrentContent()),
-            name: name
+            name: name,
+            id: this.props.targetElement.id
         };
     }
 
@@ -56,8 +59,8 @@ export default class TNDraft extends React.Component {
                     editorState={this.state.editorState}
                 />
 
-                <input type="hidden" name={"tndraft-" + this.state.name + "-json"} value={this.state.tndraftJson} />
-                <input type="hidden" name={this.state.name} value={this.state.tndraftHtml} />
+                <input type="hidden" name={"tndraft-" + this.state.id + "-json"} value={this.state.tndraftJson} />
+                <input type="hidden" name={this.state.name} id={this.state.id} value={this.state.tndraftHtml} />
 
             </div>
         )
@@ -67,6 +70,7 @@ export default class TNDraft extends React.Component {
 
 // Export component as function
 function TNDraftRender(element, defaultValue) {
+    // @todo the defaultValue should come from the actual value from the element, it should not be received as a parameter
     ReactDOM.render(
         <TNDraft
             defaultValue={defaultValue}

@@ -8174,12 +8174,15 @@
 
 	        _initialiseProps.call(_this);
 
-	        var textarea = _this.props.targetElement.querySelector('textarea');
-
-	        /*if (textarea.id.length === 0) {
+	        if (_this.props.targetElement.id.length === 0) {
 	            throw new Error("The target textarea element must have an ID");
-	        }*/
-	        var name = textarea.getAttribute("name");;
+	        }
+	        var textarea = _this.props.targetElement.querySelector('textarea');
+	        var name = textarea.getAttribute("name");
+	        /* @todo add validations:
+	            - a textarea must exist inside the targetElement
+	            - the textarea must have a name attribute
+	        */
 
 	        if (props.defaultValue.length > 0) {
 	            var contentState = (0, _draftJsImportHtml.stateFromHTML)(props.defaultValue);
@@ -8192,7 +8195,8 @@
 	            editorState: editorState,
 	            tndraftJson: JSON.stringify(editorState),
 	            tndraftHtml: (0, _draftJsExportHtml.stateToHTML)(editorState.getCurrentContent()),
-	            name: name
+	            name: name,
+	            id: _this.props.targetElement.id
 	        };
 	        return _this;
 	    }
@@ -8207,8 +8211,8 @@
 	                    updateContent: this.onUpdateContent,
 	                    editorState: this.state.editorState
 	                }),
-	                _react2.default.createElement('input', { type: 'hidden', name: "tndraft-" + this.state.name + "-json", value: this.state.tndraftJson }),
-	                _react2.default.createElement('input', { type: 'hidden', name: this.state.name, value: this.state.tndraftHtml })
+	                _react2.default.createElement('input', { type: 'hidden', name: "tndraft-" + this.state.id + "-json", value: this.state.tndraftJson }),
+	                _react2.default.createElement('input', { type: 'hidden', name: this.state.name, id: this.state.id, value: this.state.tndraftHtml })
 	            );
 	        }
 	    }]);
@@ -8232,6 +8236,7 @@
 
 	exports.default = TNDraft;
 	function TNDraftRender(element, defaultValue) {
+	    // @todo the defaultValue should come from the actual value from the element, it should not be received as a parameter
 	    _reactDom2.default.render(_react2.default.createElement(TNDraft, {
 	        defaultValue: defaultValue,
 	        targetElement: element
