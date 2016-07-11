@@ -98,10 +98,9 @@
 
 	        var textarea = _this.props.targetElement.querySelector('textarea');
 
-	        if (textarea.id.length === 0) {
+	        /*if (textarea.id.length === 0) {
 	            throw new Error("The target textarea element must have an ID");
-	        }
-	        var id = textarea.id;
+	        }*/
 	        var name = textarea.getAttribute("name");;
 
 	        if (props.defaultValue.length > 0) {
@@ -115,7 +114,6 @@
 	            editorState: editorState,
 	            tndraftJson: JSON.stringify(editorState),
 	            tndraftHtml: (0, _draftJsExportHtml.stateToHTML)(editorState.getCurrentContent()),
-	            id: id,
 	            name: name
 	        };
 	        return _this;

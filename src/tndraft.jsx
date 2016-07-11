@@ -16,12 +16,13 @@ export default class TNDraft extends React.Component {
     constructor(props) {
         super(props);
 
+
+
         var textarea = this.props.targetElement.querySelector('textarea');
 
-        if (textarea.id.length === 0) {
+        /*if (textarea.id.length === 0) {
             throw new Error("The target textarea element must have an ID");
-        }
-        let id = textarea.id;
+        }*/
         let name = textarea.getAttribute("name");;
 
 
@@ -36,7 +37,6 @@ export default class TNDraft extends React.Component {
             editorState: editorState,
             tndraftJson: JSON.stringify(editorState),
             tndraftHtml: stateToHTML(editorState.getCurrentContent()),
-            id: id,
             name: name
         };
     }
@@ -57,7 +57,7 @@ export default class TNDraft extends React.Component {
                 />
 
                 <input type="hidden" name={"tndraft-" + this.state.name + "-json"} value={this.state.tndraftJson} />
-                <input type="hidden" name={this.state.name} id={this.state.id} value={this.state.tndraftHtml} />
+                <input type="hidden" name={this.state.name} value={this.state.tndraftHtml} />
 
             </div>
         )
